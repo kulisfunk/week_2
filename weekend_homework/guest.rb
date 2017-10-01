@@ -1,9 +1,11 @@
 class Guest
-  attr_reader :name, :favourite
+  attr_reader :name, :favourite, :cash
+  attr_writer :cash
 
-  def initialize(name, favourite)
+  def initialize(name, favourite, cash)
     @name = name
     @favourite = favourite
+    @cash = cash
   end
 
 

@@ -9,13 +9,14 @@ require_relative '../song.rb'
 class TestBar < MiniTest::Test
 
   def setup()
+
     @bar = Bar.new("Gerupta Singh's")
-    @song1 = Song.new("Don't you want me")
-    @song2 = Song.new("Mama")
-    @room1 = Room.new(1, @song1)
-    @room2 = Room.new(2, @song1)
-    @guest1 = Guest.new("John", "Mama")
-    @guest2 = Guest.new("Martin", "Don't you want me")
+    @song1 = Song.new($songlist[0])
+    @song2 = Song.new($songlist[1])
+    @room1 = Room.new(1, @song1, 20)
+    @room2 = Room.new(1, @song1, 15)
+    @guest1 = Guest.new("John", "Ring of Fire", 17)
+    @guest2 = Guest.new("Martin", "Don't you want me", 25)
   end
 
   def test_bar_name()
@@ -35,14 +36,29 @@ class TestBar < MiniTest::Test
     assert_equal([@room1], actual)
   end
 
-  def test_add_guest()
-    actual = @bar.add_guest(@room1, @guest2)
+  def test_add_guest__deduct_money()
+    actual = @bar.add_guest(@room2, @guest1)
+    assert_equal([@guest1], actual)
+  end
+
+  def test_add_guest__favourite()
+    actual = @bar.add_guest(@room2, @guest1)
+    assert_equal([@guest1], actual)
+  end
+
+  def test_add_guest__not_favourite()
+    actual = @bar.add_guest(@room2, @guest2)
     assert_equal([@guest2], actual)
   end
 
-  def test_add_guest__rejected()
-    @bar.add_guest(@room1, @guest1)
-    actual = @bar.add_guest(@room1, @guest2)
+  def test_add_guest__rejected_room_full()
+    @bar.add_guest(@room2, @guest1)
+    actual = @room2.add_guest(@room2, @guest2)
+    assert_equal(false, actual)
+  end
+
+  def test_add_guest__rejected_not_enough_money()
+    actual = @bar.add_guest(@room1, @guest1)
     assert_equal(false, actual)
   end
 

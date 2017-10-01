@@ -1,9 +1,12 @@
 class Room
   attr_reader :size, :song, :guests
 
-  def initialize(size, song)
+
+
+  def initialize(size, song, entry_fee)
     @size = size
     @song = song
+    @fee = entry_fee
     @playlist = []
     @guests = []
 
@@ -24,10 +27,15 @@ class Room
       puts "I'm sorry that room is full. Please retire to our waiting lounge until a room becomes free"
 
       return false
+    elsif guest.cash < @fee
+      puts "I'm sorry you can't come in you have insufficient funds"
+      return false
+
     else
+      guest.cash -= @fee
       @guests << guest
       if @guests.map(&:favourite).include? @song.title
-        puts "Woohoo that's my toon!! '#{@song.title}'"
+        puts "Woohoo that's my toon!! '#{@song.title}' by '#{@song.artist}'"
       else
         puts "what's that racket about?"
       end

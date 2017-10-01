@@ -9,12 +9,13 @@ require_relative '../bar.rb'
 class TestRoom < MiniTest::Test
 
   def setup()
-    @song1 = Song.new("Don't you want me")
-    @song2 = Song.new("Mama")
-    @room1 = Room.new(1, @song1)
-    @room2= Room.new(2, @song1)
-    @guest1 = Guest.new("John", "Mama")
-    @guest2 = Guest.new("Martin", "Don't you want me")
+
+    @song1 = Song.new($songlist[0])
+    @song2 = Song.new($songlist[1])
+    @room1 = Room.new(1, @song1, 20)
+    @room2= Room.new(1, @song1, 15)
+    @guest1 = Guest.new("John", "Ring of Fire", 25)
+    @guest2 = Guest.new("Martin", "Don't you want me", 17)
   end
 
   def test_room_playlist()
@@ -38,20 +39,30 @@ class TestRoom < MiniTest::Test
   end
 
   def test_add_guest__favourite()
-    actual = @room1.add_guest(@room1, @guest2)
-    assert_equal([@guest2], actual)
-  end
-
-  def test_add_guest__not_favourite()
-    actual = @room1.add_guest(@room1, @guest1)
+    actual = @room2.add_guest(@room2, @guest1)
     assert_equal([@guest1], actual)
   end
 
-    def test_add_guest__rejected()
-      @room1.add_guest(@room1, @guest1)
-      actual = @room1.add_guest(@room1, @guest2)
-      assert_equal(false, actual)
-    end
+  def test_add_guest__not_favourite()
+    actual = @room2.add_guest(@room2, @guest2)
+    assert_equal([@guest2], actual)
+  end
+
+  def test_add_guest__rejected_room_full()
+    @room2.add_guest(@room2, @guest1)
+    actual = @room2.add_guest(@room2, @guest2)
+    assert_equal(false, actual)
+  end
+
+  def test_add_guest__rejected_not_enough_money()
+    actual = @room1.add_guest(@room1, @guest2)
+    assert_equal(false, actual)
+  end
+
+  def test_add_guest__deduct_money()
+    actual = @room1.add_guest(@room1, @guest1)
+    assert_equal([@guest1], actual)
+  end
 
   def test_remove_guest()
     @room2.add_guest(@room2, @guest1)
@@ -63,7 +74,7 @@ class TestRoom < MiniTest::Test
   def test_show_guest_song()
     @room1.add_guest(@room1, @guest1)
     actual = @room1.show_guest_song(@guest1)
-    assert_equal(["Mama"], actual)
+    assert_equal(["Ring of Fire"], actual)
   end
 
 
