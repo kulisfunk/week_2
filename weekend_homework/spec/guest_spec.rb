@@ -8,13 +8,8 @@ require_relative '../room.rb'
 class TestGuest < MiniTest::Test
 
   def setup()
-    @songlist = [
-      {
-        title: "Ring of Fire",
-        artist: "Johnny Cash"
-      }
-    ]
-    @song1 = Song.new(@songlist[0])
+    
+    @song1 = Song.new($songlist[0])
     @guest = Guest.new("Martin", @song1, 25)
   end
 

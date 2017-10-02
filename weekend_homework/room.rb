@@ -3,7 +3,7 @@ class Room
 
 
 
-  def initialize(size, song, entry_fee)
+  def initialize(size, songgit , entry_fee)
     @size = size
     @song = song
     @fee = entry_fee
